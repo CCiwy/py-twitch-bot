@@ -26,7 +26,7 @@ class Connection:
         self.sock.send(data)
 
 
-    def receive(self, buffer=''):
+    def receive(self, buffer='') -> str:
         msg = self.sock.recv(self.BUFF_SIZE)
         buffer += msg.decode('UTF-8')
         if len(msg) == self.BUFF_SIZE:
