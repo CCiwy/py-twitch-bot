@@ -1,3 +1,6 @@
+from bottle import jinja2_template as template
+
+
 class BotPlugin:
     """ plugin base class. might use as protocol """
     _save_attrs = []
@@ -29,8 +32,9 @@ class BotPlugin:
 
 
 class PluginWithEndpoint(BotPlugin):
-    endpoint = True
-
+    endpoint = False
+    
 
     def health(self):
-        return f'Endpoint {self.name} is working!'
+        ep = self.endpoint
+        return template('health.tpl', ep=ep)

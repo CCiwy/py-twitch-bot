@@ -15,6 +15,7 @@ NEOVIM_CFG = 'https://github.com/CCiwy/nvim_config'
 
 class MessagesPlugin(PluginWithEndpoint):
     """ wrapper around simple responses """
+    endpoint = '/messages'
 
     def __init__(self, *args, **kwargs):
         self._responses = {}
@@ -29,12 +30,11 @@ class MessagesPlugin(PluginWithEndpoint):
 
 
     def make_routes(self):
-        path_base = '/messages'
         routes = [
             ("GET", "/health", self.health),
             ("GET", "/all", self.list_responses)
         ]
-        return path_base, routes
+        return self.endpoint, routes
 
 
     def list_responses(self):

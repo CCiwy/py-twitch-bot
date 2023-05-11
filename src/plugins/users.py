@@ -3,6 +3,8 @@ from bottle import template
 
 class UsersPlugin(PluginWithEndpoint):
     template_path = 'src/users.tmpl'
+    endpoint = '/users'
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,12 +25,11 @@ class UsersPlugin(PluginWithEndpoint):
 
 
     def make_routes(self):
-        path_base = '/users'
         routes = [
             ("GET", "/health", self.health),
             ("GET", "/lurkers", self.list_lurkers)
         ]
-        return path_base, routes
+        return self.endpoint, routes
 
 
     def list_lurkers(self):
