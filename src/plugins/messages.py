@@ -42,12 +42,11 @@ class MessagesPlugin(PluginWithEndpoint):
 
     def _init_responses(self):
         _responses = {
-            'today' : TODAY,
-            'github' : GITHUB_LINK,
             'waddup' : WADDUP,
-            'neovim' : NEOVIM_CFG,
-            'muted' : MUTED
-            }
+            'muted' : MUTED,
+            'today' : TODAY
+            
+        }
 
         for cmd, msg in _responses.items():
             if not self._responses.get(cmd,False):
