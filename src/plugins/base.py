@@ -8,8 +8,9 @@ class BotPlugin:
     instances = {}
 
 
-    def __init__(self, handler):
-        self.handler = handler
+    def __init__(self, app):
+        self.app = app
+        self.handler = app.chat
         self.instances[self.name] = self
 
     @property
@@ -41,12 +42,22 @@ class PluginWithEndpoint(BotPlugin):
     def base_routes(self):
         return [("GET", "/health", self.health)]
 
-    def navigation_links(self):
+
+
+    @property
+    def template_context(self):
+        context = {}
+        context["navigation"] = self._navigation_links()
+        context["get_url"] = self.app.server.get_app_url
+        return context
+
+
+    def _navigation_links(self):
         return {p_name: p.endpoint for p_name, p in BotPlugin.instances.items() if hasattr(p, 'endpoint')}
 
 
     def template(self, tpl_name, **kwargs):
-        kwargs["navigation"] = self.navigation_links()
+        kwargs["template_context"] = self.template_context
         return template(tpl_name, **kwargs)
 
     def health(self):
