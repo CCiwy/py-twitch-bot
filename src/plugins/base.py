@@ -36,10 +36,15 @@ class BotPlugin:
 
 class PluginWithEndpoint(BotPlugin):
     endpoint = False
-    
+
 
     def base_routes(self):
         return [("GET", "/health", self.health)]
+
+    def navigation_links(self):
+        return {p_name: p.endpoint for p_name, p in BotPlugin.instances.items() if hasattr(p, 'endpoint')}
+
+
     def template(self, tpl_name, **kwargs):
         kwargs["navigation"] = self.navigation_links()
         return template(tpl_name, **kwargs)
