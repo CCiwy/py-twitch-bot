@@ -32,7 +32,7 @@ class ColorLevel(logging.Formatter):
     #info_fmt = '%(levelname)s %(asctime)s %(message)s'
 
 
-    def __init__(self, fmt='%(levelname)s %(message)s'):
+    def __init__(self, fmt='%(levelname)s [%(module)s.%(funcName)s.%(lineno)d] %(message)s'):
         logging.Formatter.__init__(self, fmt)
 
 
