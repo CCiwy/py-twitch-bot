@@ -58,7 +58,7 @@ class Chat:
         self.cap_tags = False
        
         self.logger = get_logger('CHAT')
-
+        self.running = False
 
     # ----------------------- Properties -------------------
     @property
