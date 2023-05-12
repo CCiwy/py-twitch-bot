@@ -37,7 +37,7 @@ class MessagesPlugin(PluginWithEndpoint):
 
 
     def list_responses(self):
-        return self._responses
+        return self.template('messages',handlers=self._responses)
 
 
     def _init_responses(self):
