@@ -5,9 +5,12 @@ class BotPlugin:
     """ plugin base class. might use as protocol """
     _save_attrs = []
     _name = False
+    instances = {}
+
+
     def __init__(self, handler):
         self.handler = handler
-
+        self.instances[self.name] = self
 
     @property
     def name(self):
