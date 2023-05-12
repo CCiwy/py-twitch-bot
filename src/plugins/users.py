@@ -18,6 +18,7 @@ class UsersPlugin(PluginWithEndpoint):
     def start(self):
         pass
 
+
     def get_command_names(self) -> set[str]:
         commands = set(['first','lurk'])
         return commands
@@ -27,13 +28,17 @@ class UsersPlugin(PluginWithEndpoint):
     def make_routes(self):
         routes = [
             ("GET", "/lurkers", self.list_lurkers),
-            ("GET", "/lurkers", self.list_lurkers)
+            ("GET", "/first", self.response_first),
         ]
         return self.endpoint, routes
 
 
+    def response_first(self):
+        return self._first_chatter
+
+
     def list_lurkers(self):
-        return template(self.template_path, lurkers=self._lurkers)
+        return self._lurkers
 
 
     def execute_command(self, cmd_name: str, *args):
