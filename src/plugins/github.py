@@ -2,8 +2,8 @@ from src.plugins.base import PluginWithEndpoint
 
 
 GITHUB_LINK = 'http://www.github.com/CCiwy'
-GITHUB_CURRENT = ''
-#GITHUB_CURRENT = 'https://github.com/CCiwy/py-starlette-base'
+#GITHUB_CURRENT = ''
+GITHUB_CURRENT = 'https://github.com/CCiwy/py-twitch-bot'
 NEOVIM_CFG = 'https://github.com/CCiwy/nvim_config'
 NO_PROJECT_SET = 'Quesnok did not link a current project. Please remind him to push to github!'
 

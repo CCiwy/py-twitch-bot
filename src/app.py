@@ -55,7 +55,7 @@ class App:
         
     def _init_plugins(self):
         for plugin_cls in PLUGINS:
-            plugin = plugin_cls(self.chat)
+            plugin = plugin_cls(self)
             self.__init_plugin(plugin)
 
     @property
