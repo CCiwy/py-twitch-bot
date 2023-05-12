@@ -12,7 +12,11 @@ class Server(Bottle):
         self.application_context = app
         super().__init__()
 
-    
+    def get_app_url(self, endpoint, *args):
+        endpoint = endpoint + '/' if not endpoint.endswith('/') else endpoint
+        combined_url = endpoint + '/'.join([a for a in args])
+        self.application_context.logger.debug(f'combined_url: {combined_url} <= {args}')
+        return super().get_url(combined_url)
 
     def add_route(self, rule, http_method, callback):
         route = Route(self, rule, http_method, callback)
