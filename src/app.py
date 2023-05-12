@@ -86,6 +86,8 @@ class App:
     def _make_plugin_routes(self, plugin):    
         self.logger.debug(f'Initing routes for {plugin.name}')
         path_base, routes = plugin.make_routes()
+        base_routes = plugin.base_routes() # actually same for all plugin
+        routes.extend(base_routes)
         for http_method, rel_path, callback in routes:
             abs_path = f'{path_base}{rel_path}'
             self.logger.debug(f'init Route: {abs_path} -> {callback}')

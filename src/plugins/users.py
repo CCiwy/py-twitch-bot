@@ -26,7 +26,7 @@ class UsersPlugin(PluginWithEndpoint):
 
     def make_routes(self):
         routes = [
-            ("GET", "/health", self.health),
+            ("GET", "/lurkers", self.list_lurkers),
             ("GET", "/lurkers", self.list_lurkers)
         ]
         return self.endpoint, routes

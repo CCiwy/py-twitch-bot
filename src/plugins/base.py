@@ -35,6 +35,8 @@ class PluginWithEndpoint(BotPlugin):
     endpoint = False
     
 
+    def base_routes(self):
+        return [("GET", "/health", self.health)]
     def health(self):
         ep = self.endpoint
         return template('health.tpl', ep=ep)

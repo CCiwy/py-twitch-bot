@@ -31,7 +31,6 @@ class MessagesPlugin(PluginWithEndpoint):
 
     def make_routes(self):
         routes = [
-            ("GET", "/health", self.health),
             ("GET", "/all", self.list_responses)
         ]
         return self.endpoint, routes
