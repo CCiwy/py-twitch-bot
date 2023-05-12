@@ -40,6 +40,10 @@ class PluginWithEndpoint(BotPlugin):
 
     def base_routes(self):
         return [("GET", "/health", self.health)]
+    def template(self, tpl_name, **kwargs):
+        kwargs["navigation"] = self.navigation_links()
+        return template(tpl_name, **kwargs)
+
     def health(self):
         ep = self.endpoint
-        return template('health.tpl', ep=ep)
+        return self.template('health.tpl', ep=ep)
