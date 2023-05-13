@@ -25,12 +25,11 @@ class UsersPlugin(PluginWithEndpoint):
 
 
 
-    def make_routes(self):
-        routes = [
+    def _make_routes(self):
+        self._routes = [
             ("GET", "/lurkers", self.list_lurkers),
             ("GET", "/first", self.response_first),
         ]
-        return self.endpoint, routes
 
 
     def response_first(self):
