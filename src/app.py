@@ -18,15 +18,16 @@ from src.plugins import PLUGINS
 from src.utils.logger import get_logger
 
 
+STATIC_FILE_DIR = './views/static'
 
 class App:
     running = False
 
 
     def __init__(self, *args):
-        self.chat = Chat(self, *args)
-        self.server = Server(self)
         self.logger = get_logger('APP')
+        self.chat = Chat(self, *args)
+        self.server = Server(self, static_files=STATIC_FILE_DIR)
 
 
         self._plugins = {}
