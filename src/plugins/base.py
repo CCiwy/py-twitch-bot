@@ -40,6 +40,7 @@ class BotPlugin:
 class PluginWithEndpoint(BotPlugin):
     endpoint = False
     request = request
+    _routes = False 
 
 
     def base_routes(self):
@@ -49,6 +50,10 @@ class PluginWithEndpoint(BotPlugin):
                 ]
 
 
+    def make_routes(self):
+        if not self._routes:
+            self._make_routes()
+        return self.endpoint, self._routes
 
     @property
     def template_context(self):
