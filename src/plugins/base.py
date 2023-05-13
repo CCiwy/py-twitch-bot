@@ -40,7 +40,10 @@ class PluginWithEndpoint(BotPlugin):
 
 
     def base_routes(self):
-        return [("GET", "/health", self.health)]
+        return [
+            ("GET", "/index", self.index),
+            ("GET", "/health", self.health),
+                ]
 
 
 
@@ -59,6 +62,10 @@ class PluginWithEndpoint(BotPlugin):
     def template(self, tpl_name, **kwargs):
         kwargs["template_context"] = self.template_context
         return template(tpl_name, **kwargs)
+
+    def index(self):
+        return self.template('index.tpl', endpoint=self.endpoint)
+
 
     def health(self):
         ep = self.endpoint
