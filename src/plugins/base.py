@@ -41,7 +41,7 @@ class PluginWithEndpoint(BotPlugin):
     endpoint = False
     request = request
     _routes = False 
-
+    
 
     def base_routes(self):
         return [
@@ -55,11 +55,21 @@ class PluginWithEndpoint(BotPlugin):
             self._make_routes()
         return self.endpoint, self._routes
 
+
+    def get_endpoint_routes(self):
+        """ method, rule, callback"""
+        rules = [r for (m, r, _) in self._routes if m in 'GET']
+        return [r[1:] if r.startswith('/') else r for r in rules]
+
+
+
     @property
     def template_context(self):
         context = {}
         context["navigation"] = self._navigation_links()
         context["get_url"] = self.app.server.get_app_url
+        context["rules"] = self.get_endpoint_routes()
+        context["endpoint"] = self.endpoint
         return context
 
 
