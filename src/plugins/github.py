@@ -17,20 +17,18 @@ class GithubPlugin(PluginWithEndpoint):
         super().__init__(*args, **kwargs)
         
         self._save_attrs  = ['_responses']
-
+        self._routes = False
 
     def start(self):
         self._init_responses()
 
 
-    def make_routes(self):
-        routes = [
-                ("GET", "/index", self.index),        
-                ("GET", "/current",self.current),        
-                
+    def _make_routes(self):
+        self._routes = [
+                ("GET", "/all", self.current),        
+                ("POST", "/update", self.update_response) 
                 ]
 
-        return self.endpoint, routes
     
 
     def index(self):
