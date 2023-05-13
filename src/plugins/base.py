@@ -1,4 +1,6 @@
 from bottle import jinja2_template as template
+from bottle import redirect
+from bottle import request
 
 
 class BotPlugin:
@@ -37,6 +39,7 @@ class BotPlugin:
 
 class PluginWithEndpoint(BotPlugin):
     endpoint = False
+    request = request
 
 
     def base_routes(self):
@@ -62,6 +65,11 @@ class PluginWithEndpoint(BotPlugin):
     def template(self, tpl_name, **kwargs):
         kwargs["template_context"] = self.template_context
         return template(tpl_name, **kwargs)
+
+
+    def redirect(self, route):
+        return redirect(route)
+
 
     def index(self):
         return self.template('index.tpl', endpoint=self.endpoint)
