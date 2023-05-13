@@ -29,11 +29,12 @@ class MessagesPlugin(PluginWithEndpoint):
         self._init_responses()
 
 
-    def make_routes(self):
-        routes = [
-            ("GET", "/all", self.list_responses)
+    def _make_routes(self):
+        self._routes = [
+            ("GET", "/all", self.list_responses),
+            ("POST", "/update", self.update_response),
         ]
-        return self.endpoint, routes
+
 
 
     def list_responses(self):
