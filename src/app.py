@@ -16,6 +16,7 @@ from src.server import Server
 from src.plugins import PLUGINS
 
 from src.utils.logger import get_logger
+from src.utils.configparser import Config
 
 
 STATIC_FILE_DIR = './views/static'
@@ -26,6 +27,8 @@ class App:
 
     def __init__(self, *args):
         self.logger = get_logger('APP')
+        self.config = Config('..')
+        self.config.from_pyfile('config.py')
         self.chat = Chat(self, *args)
         self.server = Server(self, static_files=STATIC_FILE_DIR)
 
