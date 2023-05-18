@@ -25,6 +25,13 @@ class BotPlugin:
         return self._name       
 
 
+    def load_config(self, config):
+        commands = config.get('data', False)
+        if commands:
+            for cmd, data in commands.items():
+                self.add_command(cmd, command=cmd, data=data)
+
+
     def add_command(self, ident: str, *args, **kwargs) -> None:
         cmd_cls = StaticCommand
 
@@ -37,8 +44,6 @@ class BotPlugin:
         
     
 
-    def get_save(self):
-        return {attr_name : getattr(self, attr_name, False) for attr_name in self._save_attrs}
     def register_command(self, command: str):
         self.handler.register_command(self, command)
 
@@ -64,10 +69,6 @@ class BotPlugin:
         if message:
             self.handler.send_message(message)
 
-    def load(self, save_game):
-        for attr, value in save_game.items():
-            if attr in self._save_attrs:
-                setattr(self, attr, value)
 
     def update_commands(self, _updates):
         for ident, new_data in _updates.items():
@@ -82,11 +83,24 @@ class BotPlugin:
             command.set_data(new_data)
 
 
+    def get_save(self):
+        return {ident : cmd.get_data() for ident, cmd in self._commands.items()}
         
 
 
 
-class PluginWithEndpoint(BotPlugin):
+    def load_state(self, save_game):
+        """ load current data after restart from json file savegame for current date """
+        _save_game = save_game.get('_responses', False)
+        save_game = _save_game if _save_game else save_game
+
+        for ident, data in save_game.items():
+            # value should be a small config
+            command = self.get_command(ident)
+            command.set_data(data)
+        
+
+
     endpoint = False
     request = request
     _routes = False 
