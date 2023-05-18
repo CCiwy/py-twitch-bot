@@ -76,11 +76,19 @@ class App:
         self.chat_thread.daemon = True
         self.chat_thread.start()
 
-        
+
+    def _load_config(self, file_path):
+        with open(file_path, 'r') as f:
+            content = json.load(f)
+            return content
+    
+
     def _init_plugins(self):
+        config_path = self.config.CONFIG_DIR + 'default.json'
+        config = self._load_config(config_path) 
         for plugin_cls in PLUGINS:
             plugin = plugin_cls(self)
-            self.__init_plugin(plugin)
+            self.__init_plugin(plugin, config)
 
     def _init_error_handling(self):
         route = ("/errors/" , "GET", self.errors.get_string)
@@ -93,8 +101,13 @@ class App:
 
     # ----------------------- Plugin related -------------------
 
-    def __init_plugin(self, plugin):
-
+    def __init_plugin(self, plugin, config):
+        config = config.get('plugins') #todo: make this clean
+        plugin_config = config.get(plugin.name, False)
+        #self.logger.debug(f'got conf for {plugin.name} {bool(plugin_config)}') 
+        if plugin_config:
+            plugin.load_config(plugin_config)
+        
         # init potential trigger methods
         if hasattr(plugin, 'trigger'):
             self.chat.add_trigger(plugin.trigger)
@@ -113,13 +126,13 @@ class App:
 
 
     def _make_plugin_routes(self, plugin):    
-        self.logger.debug(f'Initing routes for {plugin.name}')
+        #self.logger.debug(f'Initing routes for {plugin.name}')
         path_base, routes = plugin.make_routes()
         base_routes = plugin.base_routes() # actually same for all plugin
         routes.extend(base_routes)
         for http_method, rel_path, callback in routes:
             abs_path = f'{path_base}{rel_path}'
-            self.logger.debug(f'init Route: {abs_path} -> {callback}')
+            #self.logger.debug(f'init Route: {abs_path} -> {callback}')
             self.server.add_route(abs_path, http_method, callback)
 
 
@@ -139,7 +152,7 @@ class App:
                 self.logger.error(f'could not find plugin {p}.')
                 continue
 
-            p.load(plugin_save)
+            p.load_state(plugin_save)
     
 
     def __savegame_file_name(self):
