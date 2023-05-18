@@ -101,6 +101,7 @@ class BotPlugin:
         
 
 
+class Endpoint:
     endpoint = False
     request = request
     _routes = False 
@@ -110,7 +111,7 @@ class BotPlugin:
         return [
             ("GET", "/index", self.index),
             ("GET", "/health", self.health),
-                ]
+        ]
 
 
     def make_routes(self):
@@ -156,3 +157,8 @@ class BotPlugin:
     def health(self):
         ep = self.endpoint
         return self.template('health.tpl', ep=ep)
+
+
+
+class PluginWithEndpoint(BotPlugin, Endpoint):
+    pass
