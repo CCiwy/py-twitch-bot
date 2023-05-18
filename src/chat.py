@@ -8,6 +8,13 @@ from src.connection import Connection
 
 from src.utils.logger import get_logger
 
+class CommandAlreadyRegisterd(RuntimeError):
+    def __init__(self, plugin_name, command):
+        self.plugin_name = plugin_name
+        self.command = command
+
+    def __repr__(self):
+        return f'{self.__class__.__name__} {self.plugin_name} {self.command}\n'
 
 
 # IRC CHAT SERVER DATA
@@ -44,6 +51,7 @@ class TwitchMessageType(str, Enum):
 class Chat:
     def __init__(self, app, nick, oauth_token, channel):
         self.app = app
+        self.errors = app.errors
         self.nick = nick
         self.oauth_token = oauth_token
         self.channel = channel
@@ -60,6 +68,8 @@ class Chat:
         self.logger = get_logger('CHAT')
         self.running = False
 
+
+        self._commands = {}
     # ----------------------- Properties -------------------
     @property
     def conn(self):
@@ -215,15 +225,26 @@ class Chat:
         self._triggers.append(trigger)
 
 
+    def register_command(self, plugin, command):
+        try:
+            if command in self._commands.keys():
+                raise CommandAlreadyRegisterd(plugin.name, command)
+            else:
+                self._commands[command] = plugin
+
+        except CommandAlreadyRegisterd as e:
+            self.errors.add(e)
+
+
     def handle_command(self, user_name, command):
         """ parse commands that are prefixed and if command is known,
             call the matching handler
         """
         _cmd = command.rstrip()[1:]
-        # todo: we dont have self.plugins, because they are add to app now!
-        plugin = next(iter(p for p in self.plugins.values() if _cmd in p.get_command_names()), False)
+
+        plugin = self._commands.get(_cmd, False)
         if plugin:
-            return plugin.execute_command(_cmd, user_name)
+            return plugin.execute_command(_cmd, user_name=user_name)
 
 
         if _cmd in self.get_command_names():
@@ -252,6 +273,7 @@ class Chat:
 
 
     def execute_command(self, cmd_name, *args):
+        """ this basically handles !commands """
         fnc = getattr(self, cmd_name, False)
         if fnc:
             return fnc(*args)
