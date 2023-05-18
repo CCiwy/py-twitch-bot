@@ -45,14 +45,14 @@ class App:
 
 
     def _init_server(self):
-        self.server_thread = Thread(target=self.run_server)
+        self.server_thread = Thread(target=self.run_server, name='server')
         self.server_thread.daemon = True
         self.server_thread.start()
         
 
     def _init_chat(self):
         self.chat.start()
-        self.chat_thread = Thread(target=self.chat.run)
+        self.chat_thread = Thread(target=self.chat.run, name='chat')
         self.chat_thread.daemon = True
         self.chat_thread.start()
 
