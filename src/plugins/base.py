@@ -3,6 +3,14 @@ from bottle import redirect
 from bottle import request
 
 
+
+# Import Home-grown
+
+#from src.plugins.chat_commands import FallbackCommand
+from src.plugins.chat_commands import StaticCommand
+from src.plugins.chat_commands import CallbackCommand
+
+
 class BotPlugin:
     """ plugin base class. might use as protocol """
     _name = False
