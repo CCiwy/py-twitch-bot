@@ -366,7 +366,11 @@ class Chat:
 
         # todo: make this nice again
         part_tuples2 = [split_tuple(tp) for tp in part_tuples]
-        parts = {p[0] : p[1] for p in part_tuples2}
+        try:
+            parts = {p[0] : p[1] for p in part_tuples2}
+        except IndexError as e:
+            self.logger.error(e)
+            self.logger.error(msg)
 
         msg_part = parts.get('user-type', False)
         if not msg_part:

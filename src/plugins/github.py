@@ -1,4 +1,5 @@
 from src.plugins.base import PluginWithEndpoint
+from bottle import request, redirect
 
 
 GITHUB_LINK = 'http://www.github.com/CCiwy'
@@ -10,44 +11,33 @@ NO_PROJECT_SET = 'Quesnok did not link a current project. Please remind him to p
 class GithubPlugin(PluginWithEndpoint):
     endpoint = '/github'
 
-
     def __init__(self, *args, **kwargs):
-        self._responses = {}
 
         super().__init__(*args, **kwargs)
         
-        self._save_attrs  = ['_responses']
         self._routes = False
 
     def start(self):
-        self._init_responses()
-
+        pass
 
     def _make_routes(self):
         self._routes = [
                 ("GET", "/all", self.current),        
-                ("POST", "/update", self.update_response) 
+                ("POST", "/update", self.update) 
                 ]
 
-    
 
-    def index(self):
-        return 'INDEX!!!!'
+
+    def update(self):
+        _updates = self.request.forms
+        self.update_commands(_updates)
+        return redirect('/github/all')
+    # todo: reimplement
 
 
     def current(self):
-        return self._responses
-
-
-    def _init_responses(self):
-        _responses = {
-            'github' : GITHUB_LINK,
-            'neovim' : NEOVIM_CFG
-        }
-
-        for cmd, msg in _responses.items():
-            if not self._responses.get(cmd,False):
-                self._responses[cmd] = msg
+        _responses = {cmd._command : cmd.get_data() for cmd in self._commands.values()}
+        return self.template('github', handlers=_responses)
 
 
     def current_project(self):
@@ -56,16 +46,6 @@ class GithubPlugin(PluginWithEndpoint):
         return GITHUB_CURRENT
 
 
-    def get_command_names(self) -> set[str]:
-        return set(self._responses.keys())
 
-    
-    def execute_command(self, cmd_name, *args):
-        response = self._responses[cmd_name]
-        self.handler.send_message(response)
-
-
-    def get(self, msg, *args):
-        return self._responses.get(msg, False)
 
 
