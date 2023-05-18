@@ -1,27 +1,18 @@
 from src.plugins.base import PluginWithEndpoint
-from bottle import template
 
 class UsersPlugin(PluginWithEndpoint):
-    template_path = 'src/users.tmpl'
+    template_path = 'users'
     endpoint = '/users'
 
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._save_attrs = ['_lurkers_today', '_lurkers', '_first_chatter']
 
-        self._lurkers_today = []
-        self._lurkers = []
 
-        self._first_chatter = False
 
     def start(self):
-        pass
-
-
-    def get_command_names(self) -> set[str]:
-        commands = set(['first','lurk'])
-        return commands
+        self.add_command('first', command='first', data='', callback=self.first)
+        self.add_command('lurk', command='lurk', callback=self.lurk)
 
 
 
@@ -33,49 +24,70 @@ class UsersPlugin(PluginWithEndpoint):
 
 
     def response_first(self):
-        return self._first_chatter
+        _first = self._commands.get('first').get_data()
+        return self.template(self.template_path, first=_first)
 
 
     def list_lurkers(self):
-        return self._lurkers
+        _lurkers = self._commands.get('lurkers').get_data()
 
+        return self.template(self.template_path, lurkers=_lurkers)
 
-    def execute_command(self, cmd_name: str, *args):
-        fnc = getattr(self, cmd_name, False)
-        if fnc:
-            fnc(*args)
 
         
     def trigger(self, user_name):
-        if user_name in self._lurkers:         
-            self._lurkers.remove(user_name)
+        cmd = self._commands.get('lurk')
+        if not cmd:
+            return
+
+        lurk_data = cmd.get_data()
+        if not lurk_data:
+            return
+        _lurkers = lurk_data.get('current')
+        if user_name in _lurkers:         
+            _lurkers.remove(user_name)
+        
             msg = f'{user_name} is back from lurking. Welcome back!'
             self.handler.send_message(msg)     
 
 
-    def first(self, user_name):
-        if self._first_chatter:
-            if user_name == self._first_chatter:
+    def first(self, command, *args, **kwargs):
+        user_name = kwargs.get('user_name')
+        data = command.get_data()
+        if data:
+            if data == user_name:
                 msg = f'You already were the first, {user_name}!' 
             else:
-                msg = f'Today {self._first_chatter} was the first'
+                msg = f'Today {data} was the first'
         else:
-
             msg = f'Congratulations {user_name}, you were first!'
-            self._first_chatter = user_name
+            command.set_data(user_name)
+
+        return msg
+        
 
 
-        self.handler.send_message(msg)
+    def lurk(self, command, *args, **kwargs):
+        user_name = kwargs.get('user_name')
+        data = command.get_data()
+        if not data or not len(data):
+            data = {
+                    'today' : [],
+                    'current' : []
+            }
 
-            
+        
+        _lurkers_today = data.get('today')
+        _lurkers = data.get('current')
 
-    def lurk(self, user_name):
-        if user_name not in self._lurkers_today:
-            self._lurkers_today.append(user_name)
-
-        if user_name not in self._lurkers:
-            self._lurkers.append(user_name)
-            msg = f'{user_name} is now lurking. Thanks for the lurk!'
-            self.handler.send_message(msg)
+        if not user_name in _lurkers:
+            _lurkers.append(user_name)
+        
+        if not user_name in _lurkers_today:
+            _lurkers_today.append(user_name)
+        
+        command.set_data(data)
+        msg = f'{user_name} is now lurking. Thanks for the lurk!'
+        return msg
 
 
