@@ -1,0 +1,19 @@
+{"plugins" : {
+    "messages" : {
+            "data" :     
+                {
+                "today" : "",
+                "waddup" : "",
+                "muted" : "@Quesnok you are muted!",
+                "test" : "TEST THIS OUT"
+            }},    
+    
+    "github" : {
+            "data" :     
+                {
+                "github" : "http://www.github.com/CCiwy",
+                "neovim" : "https://github.com/CCiwy/nvim_config"
+                }
+            }}
+}
+
