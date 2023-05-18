@@ -3,6 +3,7 @@ import json
 import os
 
 from datetime import date
+from datetime import datetime as dt
 from threading import Thread
 
 # Import Third-Party
@@ -18,6 +19,24 @@ from src.plugins import PLUGINS
 from src.utils.logger import get_logger
 from src.utils.configparser import Config
 
+class ErrorLog:
+    def __init__(self) -> None:
+        self._entries = []
+
+    @property
+    def timestamp(self):
+        return str(dt.now())
+
+    def add(self, msg):
+        line = f'{self.timestamp}: {msg}'
+        self._entries.append(line)
+
+
+    def get(self):
+        return self._entries
+
+    def get_string(self):
+        return '<br>'.join([e for e in self._entries])
 
 STATIC_FILE_DIR = './views/static'
 
@@ -27,6 +46,7 @@ class App:
 
     def __init__(self, *args):
         self.logger = get_logger('APP')
+        self.errors = ErrorLog()
         self.config = Config('..')
         self.config.from_pyfile('config.py')
         self.chat = Chat(self, *args)
@@ -41,6 +61,7 @@ class App:
         self._init_server()
         self._init_chat()
         self._init_plugins()
+        self._init_error_handling()
         self.load()
 
 
@@ -61,6 +82,11 @@ class App:
         for plugin_cls in PLUGINS:
             plugin = plugin_cls(self)
             self.__init_plugin(plugin)
+
+    def _init_error_handling(self):
+        route = ("/errors/" , "GET", self.errors.get_string)
+        self.server.add_route(*route)
+
 
     @property
     def plugins(self):
