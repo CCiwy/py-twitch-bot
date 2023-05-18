@@ -38,7 +38,6 @@ class ErrorLog:
     def get_string(self):
         return '<br>'.join([e for e in self._entries])
 
-STATIC_FILE_DIR = './views/static'
 
 class App:
     running = False
@@ -50,7 +49,7 @@ class App:
         self.config = Config('..')
         self.config.from_pyfile('config.py')
         self.chat = Chat(self, *args)
-        self.server = Server(self, static_files=STATIC_FILE_DIR)
+        self.server = Server(self, static_files=self.config.STATIC_FILE_DIR)
 
 
         self._plugins = {}
