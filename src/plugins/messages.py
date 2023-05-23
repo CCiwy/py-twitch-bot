@@ -24,8 +24,7 @@ class MessagesPlugin(PluginWithEndpoint):
 
 
     def toggle_command_active(self, command_ident):
-        print(f'request got us {command_ident}')
-        command = self.get_command(command_ident)
+        command = self.get_command(command_ident, internal=True)
         if command:
             command.toggle_active()
         return self.redirect('/messages/all')
