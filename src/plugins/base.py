@@ -58,10 +58,13 @@ class BotPlugin:
 
 
 
-    def get_command(self, ident):
+    def get_command(self, ident, internal=False):
         """ this is called from within our application """
-        return self._commands.get(ident, False)
+        command = self._commands.get(ident, False)
+        if command and  (internal or command.is_active):
+            return command
 
+        return False
     
     def get_command_names(self) -> set[str]:
         _commands = set([c.command for c in self._commands.values() if c.is_active])
@@ -70,7 +73,9 @@ class BotPlugin:
 
     def execute_command(self, cmd_name, *args, **kwargs):
         # todo: cmd_name does not equal ident
-        command = self._commands[cmd_name]
+        command = self.get_command(cmd_name)
+        if not command:
+            return
         message = command.execute(*args, **kwargs)
         
 
@@ -80,7 +85,7 @@ class BotPlugin:
 
     def update_commands(self, _updates):
         for ident, new_data in _updates.items():
-            if ident in self._commands:
+            if new_data and ident in self._commands:
                 self._update_command(ident, new_data)
 
 
