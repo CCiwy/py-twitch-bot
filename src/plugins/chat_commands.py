@@ -49,7 +49,6 @@ class BaseCommand(object):
 
 
     def toggle_active(self):
-        print(f'toggle {self.ident} {self._is_active}')
         self._is_active = not self._is_active
 
 
@@ -61,7 +60,7 @@ class BaseCommand(object):
     def set_data(self, data):
         self._data = data
 
-
+    #todo: rename to get state
     def get_save(self):
         """ get the current state
             in a way our application can store it to file/database
@@ -71,7 +70,7 @@ class BaseCommand(object):
         return {self.ident : self.get_data()}
 
 
-
+    
 class StaticCommand(BaseCommand):
 
     def execute(self, *args, **kwargs):
