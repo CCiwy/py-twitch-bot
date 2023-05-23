@@ -34,7 +34,7 @@ class BaseCommand(object):
     def ident(self):
         return self._ident
    
-
+    @property
     def is_active(self):
         return self._is_active
 
