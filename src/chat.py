@@ -1,4 +1,6 @@
 # Import Built-Ins
+
+from typing import Callable, Union
 from datetime import datetime as dt
 from enum import Enum
 from time import sleep
@@ -281,7 +283,7 @@ class Chat:
 
     # ----------------------- Message Handlers -------------------
     # parse messages recieved from twitch
-    def get_msg_handler(self, msg):
+    def get_msg_handler(self, msg: str) -> Union[bool, Callable]:
         handlers = {
             TwitchMessageType.PRIVMSG: self.handle_privmsg,
             TwitchMessageType.PING: self.handle_ping,
@@ -366,12 +368,14 @@ class Chat:
 
         # todo: make this nice again
         part_tuples2 = [split_tuple(tp) for tp in part_tuples]
+
         try:
             parts = {p[0] : p[1] for p in part_tuples2}
         except IndexError as e:
             self.logger.error(e)
             self.logger.error(msg)
-
+            return
+            
         msg_part = parts.get('user-type', False)
         if not msg_part:
             self.logger.error(f'not able to parse msg! \n{parts}')
