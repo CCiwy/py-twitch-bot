@@ -1,7 +1,6 @@
 from src.plugins.base import PluginWithEndpoint
 
 
-
 class MessagesPlugin(PluginWithEndpoint):
     """ wrapper around simple responses """
     endpoint = '/messages'
@@ -19,6 +18,25 @@ class MessagesPlugin(PluginWithEndpoint):
         self.make_route("POST", "/update", self.update)
         self.make_route("GET", "/activate/<command_ident>", self.toggle_command_active)
         self.make_route("GET", "/new", self.new_command, sidebar_element=True)
+        self.make_route("POST", "/new", self.add_new_command)
+
+
+    def new_command(self):
+
+        return self.template('newcommand')
+
+
+    def add_new_command(self):
+        cmd_data = self.request.forms
+
+        ident = cmd_data.get('ident', False)
+        if not ident:
+            return
+        command = cmd_data.get('command', ident)
+        data = cmd_data.get('data')     
+
+        self.add_command(ident, command=command, data=data)
+        self.redirect('/messages/all')
 
 
     def toggle_command_active(self, command_ident):
