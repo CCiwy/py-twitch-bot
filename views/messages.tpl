@@ -1,19 +1,10 @@
-{% extends 'base.tpl' %}
+    {% from 'macros/plugins.macro' import render_command_list %}
+    {% extends 'base.tpl' %}
 
-{% macro show_command(command, response) %}
-    <div>{{ command }} </div>  <input type="text" value="{{ response }}"></input>
-{% endmacro %}
 
 {% block content %}
-<h2> Messages Overview </h2>
-
-<div styles="width=80%; margin: auto;">
-    <ul styles="list-style-type=none;display: flex; flex-direction=column;width=100%">
-    {% for command, response in handlers.items() %}
-    <li styles="width=100%">
-        {{ show_command(command, response) }}
-    </li>
-    {% endfor %}
-    <ul>
+<h3> Messages Overview </h3>
+    {% set endpoint = template_context["endpoint"] %}
+    {{ render_command_list(endpoint, handlers) }}
 </div>
 {% endblock %}
