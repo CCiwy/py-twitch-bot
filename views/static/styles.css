@@ -37,10 +37,42 @@ nav ul li {
 
 nav ul div {
     border-radius: 0.33rem;
+    border: 0.1rem solid var(--main-shade-color);
+    text-align: center;
 }
 
 nav ul li a {
     text-decoration: none;
-    border: 0.1rem solid black;
+}
+main {
+    width: 90%;
+    margin: auto;
+}
+
+.nav_link {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* SIDEBAR */
+.sidebar_link {
+    background-color: var(--second-background-color);
+    color: var(--second-text-color);
+    
+    border: 0.33rem solid var(--main-highlight-color);
+    border-radius: 0.25rem;
+    
+    padding: 0.66rem;
+    margin-bottom: 2rem; 
+
+}
+
+.sidebar_link a {
+    margin-left: 1rem;
+    
+}
+
+
+
 }
 
