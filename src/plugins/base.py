@@ -11,6 +11,30 @@ from src.plugins.chat_commands import StaticCommand
 from src.plugins.chat_commands import CallbackCommand
 
 
+class AppRoute:
+    def __init__(self, rule, callback, http_method="GET", sidebar_element=False, param=False):
+        self.rule = rule
+        self.callback = callback
+        self.http_method = http_method
+        self.param = self._set_param(param)
+
+        self.is_sidebar_element = (sidebar_element and not http_method == "POST")
+
+
+    def get(self):
+        """ return the route data as called in endpoint.make_routes """
+        rule = self.rule if not self.param else f'{self.rule}/{self.param}'
+         
+        return (self.http_method, rule, self.callback)
+ 
+
+    def _set_param(self, param):
+        if param and param.startswith('<') and param.endswith('>'):
+            return param 
+        
+        return False
+
+
 class BotPlugin:
     """ plugin base class. might use as protocol """
     _name = False
