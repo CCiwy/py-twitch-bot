@@ -3,16 +3,24 @@
     height: 100%;
     padding: 0;
     margin: 0;
+
+    --main-background-color: grey;
+    --main-text-color: black;
+    --second-background-color: black;
+    --second-text-color: white;
+
+    --main-shade-color: #00C3C3;
+    --main-highlight-color: aqua;
 }
 
 
 html {
-    background-color: grey;
+    background-color: var(--main-background-color);
 }
 
 nav {
     font-size: 22px;
-    background-color: black;
+    background-color: ;
     color: white;
 }
 
