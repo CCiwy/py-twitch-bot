@@ -74,6 +74,37 @@ main {
 
 
 
+/* render commands */
+.command_entry {
+    padding: 1rem;
+    background-color: var(--main-shade-color);
+    border: 0.1 rem solid  ;
+    border-radius: 0.33rem;
+    margin-bottom: 0.33rem;
+}
+
+.command_name {
+}
+
+.command_response {
+    width: 90%;
+}
+
+.command_button {
+    background-color: rgba(255,0,0,0.5);
+    padding: 0.5rem;
+    border: 0.33rem solid var(--second-text-color);
+    border-radius: 0.33rem;
+}
+
+.command_inactive {
+    background-color: rgba(0, 255, 255, 0.5);
+    border: 0.33rem solid var(--second-text-color);
+}
+
+.command_button a {
+    text-decoration: none;
+    color: var(--second-text-color);
 }
     /* BUTTONS */
 
