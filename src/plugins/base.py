@@ -134,8 +134,10 @@ class BotPlugin:
         for ident, data in save_game.items():
             # value should be a small config
             command = self.get_command(ident)
-            command.set_data(data)
-        
+            if command:
+                command.set_data(data)
+            else:
+                self.add_command(ident, command=ident, data=data)
 
 
 class Endpoint:
