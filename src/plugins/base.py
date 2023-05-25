@@ -141,7 +141,6 @@ class BotPlugin:
 class Endpoint:
     endpoint = False
     request = request
-    _routes = False 
     
 
     def base_routes(self):
