@@ -28,13 +28,12 @@ class MessagesPlugin(PluginWithEndpoint):
 
     def add_new_command(self):
         cmd_data = self.request.forms
-
         ident = cmd_data.get('ident', False)
         if not ident:
             return
-        command = cmd_data.get('command', ident)
+        command = cmd_data.get('command', False)
         data = cmd_data.get('data')     
-
+        command = command if command else ident
         self.add_command(ident, command=command, data=data)
         self.redirect('/messages/all')
 
