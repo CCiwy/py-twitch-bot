@@ -170,7 +170,7 @@ class Endpoint:
 
     def get_endpoint_routes(self):
         """ method, rule, callback"""
-        rules = [r for (m, r, _) in self._routes if m in 'GET']
+        rules = [route.rule for route in self._routes if route.is_sidebar_element]
         return [r[1:] if r.startswith('/') else r for r in rules]
 
 
