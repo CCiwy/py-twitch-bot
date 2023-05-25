@@ -10,10 +10,9 @@ class MessagesPlugin(PluginWithEndpoint):
 
         super().__init__(*args, **kwargs)       
 
-
     def start(self):
-        #self._init_responses()
-        pass
+       pass 
+
 
     def _make_routes(self):
         self.make_route("GET", "/all", self.list_responses, sidebar_element=True)
