@@ -16,11 +16,10 @@ class MessagesPlugin(PluginWithEndpoint):
         pass
 
     def _make_routes(self):
-        self._routes = [
-            ("GET", "/all", self.list_responses),
-            ("POST", "/update", self.update),
-            ("GET", "/activate/<command_ident>", self.toggle_command_active),
-        ]
+        self.make_route("GET", "/all", self.list_responses, sidebar_element=True)
+        self.make_route("POST", "/update", self.update)
+        self.make_route("GET", "/activate/<command_ident>", self.toggle_command_active)
+        self.make_route("GET", "/new", self.new_command, sidebar_element=True)
 
 
     def toggle_command_active(self, command_ident):

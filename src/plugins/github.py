@@ -15,17 +15,18 @@ class GithubPlugin(PluginWithEndpoint):
 
         super().__init__(*args, **kwargs)
         
-        self._routes = False
 
     def start(self):
         pass
 
     def _make_routes(self):
-        self._routes = [
+        route_data = [
                 ("GET", "/all", self.current),        
                 ("POST", "/update", self.update) 
                 ]
-
+        
+        for entry in route_data:
+            self.make_route(*entry)
 
 
     def update(self):

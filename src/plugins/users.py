@@ -17,10 +17,13 @@ class UsersPlugin(PluginWithEndpoint):
 
 
     def _make_routes(self):
-        self._routes = [
+        route_data = [
             ("GET", "/lurkers", self.list_lurkers),
             ("GET", "/first", self.response_first),
         ]
+
+        for entry in route_data:
+            self.make_route(*entry, sidebar_element=True)
 
 
     def response_first(self):

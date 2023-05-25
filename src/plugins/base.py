@@ -143,17 +143,27 @@ class Endpoint:
     request = request
     
 
-    def base_routes(self):
-        return [
+    def _make_base_routes(self):
+        route_data = [
             ("GET", "/index", self.index),
-            ("GET", "/health", self.health),
-        ]
+            ("GET", "/health", self.health)]
+
+        for entry in route_data:
+            self.make_route(*entry)
+        
+        
+    def make_route(self, http_method, rule, callback, *args, **kwargs):
+        route = AppRoute(rule, callback, http_method=http_method, *args, **kwargs)
+        self._routes.append(route)
 
 
     def make_routes(self):
-        if not self._routes:
-            self._make_routes()
-        return self.endpoint, self._routes
+        if not len(self._routes):
+            self._make_base_routes()
+            self._make_routes() # child method
+
+        routes = [route.get() for route in self._routes]
+        return self.endpoint, routes
 
 
     def get_endpoint_routes(self):
@@ -197,4 +207,8 @@ class Endpoint:
 
 
 class PluginWithEndpoint(BotPlugin, Endpoint):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._routes = []
+
+
