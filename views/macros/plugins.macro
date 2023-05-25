@@ -1,0 +1,37 @@
+{% macro render_command(endpoint, command) %}
+        <div class="row command_entry">
+            <div class="two columns command_name">
+                {{ command.command }}
+            </div>
+            <div class="eight columns">
+                <textarea class="command_response" name="{{ command.ident }}" rows="3"/>{{ command.get_data() }}</textarea>
+           </div>
+           {% set btn_cls = "command_button" if command.is_active else " command_button command_inactive" %}
+            <div class="two columns {{btn_cls}}">
+                <a href="{{endpoint}}/activate/{{command.ident}}">
+                    {{"deactivate" if command.is_active else "activate"}}
+                </a>
+            </div>
+        </div>
+{% endmacro %}
+
+
+
+{% macro render_command_list(endpoint, commands) %}
+    <div class="container">
+        <div class="row">
+            <div class="ten colums">
+                {% set active_states = [] %}
+                <form action="{{endpoint}}/update" method="POST">
+                {% for command in commands.values() %}
+                    {% set current_state = (command.ident, command.is_active) %}
+                    {% set active_states = active_states.append(current_state) %}
+                    {{ render_command(endpoint, command) }}
+                {% endfor %}
+                <input class="btn_submit" type="submit" value="[UPDATE]"/>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
