@@ -1,0 +1,18 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: 100px auto;
+}
+
+.content {
+    width: 90%;
+    height: 100%;
+    margin: auto;
+}
+
+.sidebar {
+    width: 100%;
+}
+
+.pt-1 {
+    padding-top: 1rem;
+}

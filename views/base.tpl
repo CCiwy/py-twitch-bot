@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/static/skeleton.css" type="text/css">
     <link rel="stylesheet" href="/static/normalize.css" type="text/css">
     <link rel="stylesheet" href="/static/styles.css" type="text/css">
+    <link rel="stylesheet" href="/static/layout.css" type="text/css">
     <body>
         {% set navigation = template_context["navigation"] %}
         {{ navigation_links(navigation, get_url) }}
