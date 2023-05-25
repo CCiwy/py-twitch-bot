@@ -1,12 +1,21 @@
+{% macro render_nav_link(link, name) %}
+    <div class="column">
+        <li>
+            <a class="nav_link" href="{{link}}"> {{ name }} </a>
+        </li>
+    </div>
+{% endmacro %}
+
 {% macro navigation_links(navigation, get_url) %}
     <nav>
-        <div class="container">
+        <div class="container pt-1">
             <ul class="row">
                 {% for plugin_name, endpoint in navigation.items() %}
-                    <div class="{{12 // (navigation | length) }} column">
-                        <li><a href="{{get_url(endpoint, "index")}}"> {{ plugin_name }} </a></li>
-                    </div>
+                    {% set link = get_url(endpoint, 'index') %}
+                    {{ render_nav_link(link, plugin_name) }}
                 {% endfor %}
+            
+                {{ render_nav_link(get_url('/', 'errors/'), "errors") }}
             </ul>
         </div>
     </nav>
