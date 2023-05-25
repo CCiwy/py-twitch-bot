@@ -75,4 +75,9 @@ main {
 
 
 }
+    /* BUTTONS */
 
+.btn_submit {
+    background-color: green;
+    color: green;
+}
